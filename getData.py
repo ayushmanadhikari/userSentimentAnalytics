@@ -1,7 +1,8 @@
-#we will be using coin api to get the crypto data
+#we will be using coincap api to get the crypto data
 
 import requests
 
+#endpoint for market data
 url = "https://api.coincap.io/v2/assets"
 
 payload = {}

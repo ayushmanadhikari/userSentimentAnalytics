@@ -1,0 +1,32 @@
+This document contains the requirement analysis for this project. Things may come off as random thoughts put without order but we will sort these points eventually. 
+
+
+What does the project do?
+	- This project performs the corelation analysis between the actual crypto price for a selected coin and the user sentiments in the social media app X
+	- It does this comparision in near real-time.
+	- It also provides the top trending cyptos in real time as well as in 
+	X
+	- It also provides the charts for a selected crypto giving time series information about it
+	- You have the option to select the time window for which you want the analysis(top trending, chart, corelation analysis)
+
+
+Objective of the project?
+	1. To provide analysis(top trending, timeseries chart and corelation analysis) between data from Crypto market and X
+
+
+
+Fields of data required from
+	1. Crpto market
+		- symbol
+		- id/name
+		- rank : current rank in the market
+		- supply : amount of coins in the market
+		- maxSupply : maximum coins that will ever be in the market
+		- marketCapUsd : total market value of the coin. maybe supply*priceUsd 
+		- volumeUsd24hr : total value of transactions of the coin in last 24hr
+		- priceUsd : price of 1 coin 
+		- changepercent24hr : change in price in 24 hr
+		- vwap24hr : volume-weighted average price of a cryptocurrency over the past 24 hours
+
+	2. X
+		-
