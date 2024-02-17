@@ -2,7 +2,7 @@
 
 import requests
 
-#endpoint for market data
+#endpoints for market data
 url = "https://api.coincap.io/v2/assets"
 
 payload = {}
@@ -10,4 +10,5 @@ headers = {}
 
 response = requests.request("GET", url, headers=headers, data=payload)
 
-print(response.text)
+
+
