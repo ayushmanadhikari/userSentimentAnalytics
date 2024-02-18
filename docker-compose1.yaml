@@ -15,6 +15,8 @@ services:
     image: bitnami/kafka
     platform: linux/arm64
     container_name: kafka1
+    depends_on:
+      - zookeeper
     ports: 
       - 9092:9092  
       - 29092:29092
@@ -27,4 +29,6 @@ services:
       KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
       ALLOW_PLAINTEXT_LISTENER: yes
+
+  
   
