@@ -29,6 +29,20 @@ services:
       KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
       ALLOW_PLAINTEXT_LISTENER: yes
+  
+
+  kafkaui:
+    image: provectuslabs/kafka-ui
+    container_name: kafkaui0
+    ports:
+      - 8010:8080
+    depends_on:
+      - kafka1
+    environment:
+      KAFKA_CLUSTERS_0_NAME: local
+      KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS: kafka1:9092
+      KAFKA_CLUSTERS_0_ZOOKEEPER: zk0:2181
+      KAFKA_CLUSTERS_0_JMXPORT: 9997
 
   
   
