@@ -1,7 +1,6 @@
 #we will be using coincap api to get the crypto data
 
 import requests
-import kafka
 import logging as log
 from kafka import KafkaProducer
 from kafka.errors import KafkaError
@@ -19,20 +18,13 @@ response = requests.request("GET", url, headers=headers, data=payload)
 CONS_KAFKA_SERVER = "localhost:29092"
 CONS_KAFKA_TOPIC = "coincapData"
 
+
 #kafka producer for pushing coincap response into kafka topic
-
-
-#Steps to sending api data to kafka topic
-#1. getting the data... this step is completed and the data is in response
-#2. creating a kafka topic...  this step is embedded in the 3rd step as producer will create the topic automatically if it doesn't exist
-#3. sending data to kafka topic.. this is the final step and goes like this
-
-
 producer = KafkaProducer(bootstrap_servers=CONS_KAFKA_SERVER)
 message = json.dumps(response.text)
 producerResponse = producer.send(CONS_KAFKA_TOPIC, message.encode('ascii'))
 
-
+#synchronous send code block
 try:
     record_metadata = producerResponse.get(timeout=10)
 except KafkaError:
