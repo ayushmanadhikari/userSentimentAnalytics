@@ -10,8 +10,10 @@ What does the project do?
 	- You have the option to select the time window for which you want the analysis(top trending, chart, corelation analysis)
 
 
+
 Objective of the project?
-	1. To provide analysis(top trending, timeseries chart and corelation analysis) between data from Crypto market and X
+	1. To provide analysis(top trending, timeseries chart and corelation) between data from Crypto market and X
+
 
 
 
@@ -29,4 +31,8 @@ Fields of data required from
 		- vwap24hr : volume-weighted average price of a cryptocurrency over the past 24 hours
 
 	2. X
-		-
+		- similar data fields as from crypto market with additional fields like
+		- 
+
+
+
