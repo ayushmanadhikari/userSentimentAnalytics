@@ -20,16 +20,6 @@ reddit = praw.Reddit(
     username = USERNAME
 )
 
-#using requests library.. not working condition
-# url = "https://www.reddit.com/api/subreddits_by_topic"
-# headers = {
-#     'client_id' : CLIENT_ID,
-#     'client_secret' : CLIENT_SECRET,
-#     'user_agent' : USER_AGENT
-# }
-# response = requests.request("GET", url=url, headers=headers)
-# print(response.text)
-
 print(reddit.user.me())
 
 
