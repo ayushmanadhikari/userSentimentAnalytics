@@ -39,30 +39,34 @@ def get_content():
 
     print("Welcome:  " + str(reddit.user.me()))
 
-    for cryptoSub in cryptoSubRedditsTest:
+    for cryptoSub in cryptoSubReddits:
         print("Requested Subreddit   ---->   "+cryptoSub)
         subreddit = reddit.subreddit(cryptoSub)
-        topSubreddit = subreddit.top(limit=5)
+        topSubreddit = subreddit.top(limit=20)
 
-        for subs in topSubreddit:
-            if not subs.stickied:
-                subs.comment_limit = 10
-                comments_placehoolder =[]
-                #to get top comments from a post
-                for comment in subs.comments:
-                    if isinstance(comment, praw.models.Comment):
-                        comments_placehoolder.append(comment.body)
+        for submissionPost in topSubreddit:
+            if not submissionPost.stickied:
+
+                # Create a list to store comments and set necessary conditions
+                comments_placeholder = []
+                submissionPost.comments.replace_more(limit=10)  # Set the comment limit to 5
+                submissionPost.comment_sort = 'top'
                 
+                # Retrieve and store comments in comments_placeholder
+                for comment in submissionPost.comments.list()[:10]:          #adjust this number to set the number of comments being stored
+                    comments_placeholder.append(comment.body)
+
+
                 # data dict to store the extracted data
-                data = {'Title': subs.title,
-                        "Author": subs.author,      
-                        "Subreddit": subs.subreddit,
-                        "URL": subs.url,
-                        "Created Time": subs.created_utc,
-                        "Vote Count": subs.score,
-                        "Number of Comments": subs.num_comments,
-                        "Number of comments Extracted": len(comments_placehoolder),
-                        "Comments": comments_placehoolder
+                data = {'Title': submissionPost.title,
+                        "Author": submissionPost.author,      
+                        "Subreddit": submissionPost.subreddit,
+                        "URL": submissionPost.url,
+                        "Created Time": submissionPost.created_utc,
+                        "Vote Count": submissionPost.score,
+                        "Number of Comments": submissionPost.num_comments,
+                        "Number of comments Extracted": len(comments_placeholder),
+                        "Comments": comments_placeholder
                 }
                 
                 #appending the global data_list with this iteratiosns data
@@ -72,9 +76,8 @@ def get_content():
                 data = list(data.items())
                 print(data[:8])
                 
-                
-                
                 time.sleep(2)
+
 
     return data_list            
 
