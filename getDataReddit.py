@@ -14,23 +14,6 @@ PASSWORD = "numbers4799"
 
 session = requests.Session()
 
-
-
-
-
-
-
-# # we could get a bunch of information about this submission/subreddit post
-# dataESub = reddit.subreddit('dataengineering')
-# dataE = dataESub.hot(limit=5)
-# for submission in dataE:
-#     if not submission.stickied:
-#         print(submission.title, "\n", submission.ups, "\n", submission.downs, "\n", submission.visited)
-
-# for submission in reddit.subreddit("test").hot(limit=10):
-#     print(submission.title)
-
-
 #---------------------------crypto work------------------------------#
 
 
@@ -38,11 +21,15 @@ session = requests.Session()
 cryptoSubReddits = ['ethtrader', 'cryptocurrency', 'Bitcoin', 'altcoin', 'cryptocurrencies', 'cryptocurrencies', 'cryptocurrencytrading', 
                     "CryptoMarkets", "Crypto_General", "Web3"]
 
-cryptoSubRedditsTest = ['ethtrader', 'ryptocurrency']
+cryptoSubRedditsTest = ['ethtrader', 'cryptocurrency']
 
-data_list = []
 
+
+#gets data from above subreddits
 def get_content():
+    data_list = []
+
+    #initializing reddit object
     reddit = praw.Reddit(
         client_id = CLIENT_ID,
         client_secret = CLIENT_SECRET,
@@ -55,9 +42,9 @@ def get_content():
     for cryptoSub in cryptoSubRedditsTest:
         print("Requested Subreddit   ---->   "+cryptoSub)
         subreddit = reddit.subreddit(cryptoSub)
-        hotSubreddit = subreddit.top(limit=10)
+        topSubreddit = subreddit.top(limit=5)
 
-        for subs in hotSubreddit:
+        for subs in topSubreddit:
             if not subs.stickied:
                 subs.comment_limit = 10
                 comments_placehoolder =[]
@@ -72,22 +59,31 @@ def get_content():
                         "Subreddit": subs.subreddit,
                         "URL": subs.url,
                         "Created Time": subs.created_utc,
-                        "Comments": subs.num_comments,
                         "Vote Count": subs.score,
+                        "Number of Comments": subs.num_comments,
+                        "Number of comments Extracted": len(comments_placehoolder),
                         "Comments": comments_placehoolder
                 }
-                print(data)
+                
                 #appending the global data_list with this iteratiosns data
                 data_list.append(data)
+
+                # printing everything except comments item from data dictionary
+                data = list(data.items())
+                print(data[:8])
+                
+                
                 
                 time.sleep(2)
-                
+
+    return data_list            
 
 
 
-def save2csv():
-    csv_headers = ['Title', 'Author', 'Subreddit', 'URL', 'Created Time', 'Number of Comments', 'Vote Count', 'Comments']
-    with open('cryptodata', 'w', newline='') as file:
+#saves the collected data from subreddits into a csv file
+def save2csv(data_list):
+    csv_headers = ['Title', 'Author', 'Subreddit', 'URL', 'Created Time', 'Number of Comments', 'Vote Count', 'Number of comments Extracted', 'Comments']
+    with open('cryptodata.csv', 'w', newline='') as file:
         writer = csv.DictWriter(file, fieldnames=csv_headers)
         writer.writeheader()
         for data in data_list:
@@ -96,7 +92,9 @@ def save2csv():
 
 
 if __name__ == "__main__":
+    data_list = []
     data_list = get_content()
+    save2csv(data_list)
     
 
     
