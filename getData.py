@@ -37,8 +37,8 @@ def sendToKafka(response):
         log.exception()
         pass
     
-    print(record_metadata.topic)
-    print(record_metadata.partition)
+    print("Topic: "+record_metadata.topic)
+    print("Partition: "+record_metadata.partition)
 
 
 
