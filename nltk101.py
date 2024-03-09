@@ -3,6 +3,7 @@ from nltk.stem import PorterStemmer
 from nltk.stem import LancasterStemmer
 from nltk import WordNetLemmatizer
 from nltk import pos_tag
+from nltk import ne_chunk
 
 #tokenizers split any string into tokens(words) which can be used for further analysis
 #2 types of tokenizers are displayed below... whitespacetokenizer and treebanktokenzier
@@ -10,13 +11,13 @@ from nltk import pos_tag
 string1 = "this is some random string, that we are going to tokenize adsjkfn 435kjn 324."
 ws_tok = tokenize.WhitespaceTokenizer()
 token_list = ws_tok.tokenize(string1)
-print(token_list)
+#print(token_list)
 
 
 #treebank tokenizer
 tb_tokenizer = tokenize.TreebankWordTokenizer()
 token_list = tb_tokenizer.tokenize(string1)
-print(token_list)
+#print(token_list)
 
 
 #stemming is normalizing your text.. thus it reduces the information from your text
@@ -28,15 +29,27 @@ print(token_list)
 #porterstemmer ... less agresive 
 porter = PorterStemmer()
 porter_tokens = [porter.stem(token) for token in token_list]
-print(porter_tokens)
+#print(porter_tokens)
 
 
 #lancasterstemmer... for aggressive
 lanc = LancasterStemmer()
 token_list = [lanc.stem(token) for token in token_list ]
-print(token_list)
+#print(token_list)
 
 
+
+def get_lemma_tag(pos_tag):
+    if pos_tag.startswith('J'):
+        return 'a'
+    elif pos_tag.startswith('V'):
+        return 'v'
+    elif pos_tag.startswith('N'):
+        return 'n'
+    elif pos_tag.startswith('R'):
+        return 'r'
+    else:
+        return 'n'
 
 
 #similar to stemming, lemmatization is another normalization technique with the goal of reducing the variance of your text
@@ -45,9 +58,33 @@ print(token_list)
 #good thing is we can extract pos tag from the text  and use it with lementizer
 lementizer = WordNetLemmatizer()
 lemments_list = [lementizer.lemmatize(token) for token in token_list]
-print(lemments_list)
+print("lemets list:  "+ str(lemments_list))
 
 
 #this returns the part of speech tag from token list
 pos_tags = pos_tag(lemments_list)
-print(pos_tags)
+print("pos tags:  "+str(pos_tags))
+
+
+#lemmentizing with pos tag extracted
+extractedPosTag=[]
+for pos1 in pos_tags:
+    lementsList2 = [lementizer.lemmatize(token, pos=get_lemma_tag((str(pos1)))) for token in token_list]
+    extractedPosTag.append(pos1[1])
+
+print()
+print("extracted Pos Tags:     "+str(extractedPosTag)+"\n")
+print("lemets list:      " + str(lementsList2))
+
+
+#ne chunks for named entity recognition which identifies which word is a person's name, location, etc
+chunk = ne_chunk(pos_tags)
+print(chunk)
+
+
+
+text1 = "this is the text part"
+token = tokenize.TreebankWordTokenizer().tokenize(text1)
+tags = pos_tag(token)
+
+
