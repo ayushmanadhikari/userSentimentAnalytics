@@ -59,6 +59,7 @@ def get_content():
 
                 # data dict to store the extracted data
                 data = {'Title': submissionPost.title,
+                        'Body': submissionPost.selftext,
                         "Author": submissionPost.author,      
                         "Subreddit": submissionPost.subreddit,
                         "URL": submissionPost.url,
@@ -85,7 +86,7 @@ def get_content():
 
 #saves the collected data from subreddits into a csv file
 def save2csv(data_list):
-    csv_headers = ['Title', 'Author', 'Subreddit', 'URL', 'Created Time', 'Number of Comments', 'Vote Count', 'Number of comments Extracted', 'Comments']
+    csv_headers = ['Title','Body', 'Author', 'Subreddit', 'URL', 'Created Time', 'Number of Comments', 'Vote Count', 'Number of comments Extracted', 'Comments']
     with open('cryptodata.csv', 'w', newline='') as file:
         writer = csv.DictWriter(file, fieldnames=csv_headers)
         writer.writeheader()
