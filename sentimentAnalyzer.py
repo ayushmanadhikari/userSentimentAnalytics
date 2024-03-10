@@ -36,9 +36,9 @@ def sentimentKeywordOutput(outputDict):
 def getRedditData():
     df = pd.read_csv(CSVFILENAME)
     if not df.empty:
-        print("Data imported successfully....")
-        print("Here's sample data")
-        print(df[['Title', 'URL']].head(2))
+        print("Data imported successfully.... \n")
+        # print("Here's sample data")
+        # print(df[['Title', 'URL']].head(2))
 
     return df
 
@@ -46,7 +46,8 @@ def getRedditData():
 
 if __name__=="__main__": 
     redditDF = getRedditData()
-    
+    print(redditDF.head(5))
+
 
 
 

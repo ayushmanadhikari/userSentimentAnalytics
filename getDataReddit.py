@@ -39,6 +39,7 @@ def get_content():
 
     print("Welcome:  " + str(reddit.user.me()))
 
+
     for cryptoSub in cryptoSubReddits:
         print("Requested Subreddit   ---->   "+cryptoSub)
         subreddit = reddit.subreddit(cryptoSub)
