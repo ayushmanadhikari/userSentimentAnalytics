@@ -94,7 +94,7 @@ def save2csv(data_list):
             writer.writerow(data)
 
 
-
+#main function
 if __name__ == "__main__":
     data_list = []
     data_list = get_content()
