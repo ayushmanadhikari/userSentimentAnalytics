@@ -7,7 +7,7 @@ from vaderSentiment.vaderSentiment import SentimentIntensityAnalyzer
 
 
 #defined constants
-CSVFILENAME = "cryptodata.csv"
+CSVFILENAME = "data/cryptodata.csv"
 
 
 

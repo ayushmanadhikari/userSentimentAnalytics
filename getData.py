@@ -34,7 +34,7 @@ def sendToKafka(response):
     try:
         record_metadata = producerResponse.get(timeout=10)
     except KafkaError:
-        log.exception()
+        log.exception(KafkaError)
         pass
     
     print("Topic: "+record_metadata.topic)
