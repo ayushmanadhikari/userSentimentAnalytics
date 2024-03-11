@@ -43,7 +43,7 @@ def initializeReddit():
         client_secret = CLIENT_SECRET,
         user_agent = USER_AGENT,
         password = PASSWORD,
-        username = USERNAME, ratelimit_seconds=300)
+        username = USERNAME, ratelimit_seconds=300, limit_type='backoff')
     print("Welcome:  " + str(reddit.user.me()) + "\n")
     return reddit
 
