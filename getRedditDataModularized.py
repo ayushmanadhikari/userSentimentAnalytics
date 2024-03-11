@@ -52,7 +52,7 @@ def initializeReddit():
 
 def save2csv(data_list):
     csv_headers = ['Title','Body', 'Author', 'Subreddit', 'URL', 'Created Time', 'Number of Comments', 'Vote Count', 'Number of comments Extracted', 'Comments']
-    with open('cryptodata.csv', 'w', newline='') as file:
+    with open('data/cryptodata.csv', 'w', newline='') as file:
         writer = csv.DictWriter(file, fieldnames=csv_headers)
         writer.writeheader()
         for data in data_list:
