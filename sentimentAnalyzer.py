@@ -3,11 +3,12 @@
 
 import pandas as pd
 from vaderSentiment.vaderSentiment import SentimentIntensityAnalyzer
+import nltk
 
 
 
 #defined constants
-CSVFILENAME = "data/cryptodata.csv"
+CSVFILENAME = "data/cryptodataTest.csv"
 
 
 
@@ -45,7 +46,10 @@ def sentimentKeywordOutput(outputDict):
 
 
 
-def namedEntityRecognizer():
+def namedEntityRecognizer(sentence):
+    tokens = nltk.word_tokenize(sentence)
+    taggedTokens = nltk.pos_tag(tokens)
+    entities = nltk.ne_chunk(taggedTokens)
     pass
 
 
@@ -65,6 +69,7 @@ def getPolarityScores(dataframe):
     #get scores for body
     print("extracting scores for body....")
     for sentence in dataframe['Body']:
+
         sentimentScoreDict = sentimentAnalyzer(str(sentence))
         dictWithpolarityValuestoAppend['Body Score'].append(sentimentScoreDict['compound'])
         #print(sentimentScoreDict['compound'])
@@ -72,16 +77,24 @@ def getPolarityScores(dataframe):
     
     #get scores for comments by averaging the total number of comments
     print("extracting scores for comments....")
+    #postCount = 0                  #gives the count of nth post it is currently working for
     for commentsList in dataframe['Comments']:
         totalCommentScore = 0
         avgCommentScore = 0
+        count = 0
         for sentence in commentsList:
             score = sentimentAnalyzer(sentence)
             totalCommentScore = totalCommentScore + score['compound']
-        avgCommentScore = totalCommentScore/len(commentsList)
+            if score['compound'] != 0:
+                count = count + 1           
+        avgCommentScore = totalCommentScore/count
+        #postCount = postCount + 1   
+        #print(postCount)
         print(avgCommentScore)
         dictWithpolarityValuestoAppend['Comments Score'].append(avgCommentScore)
-    
+
+
+
     dataframe['Title Score'] = dictWithpolarityValuestoAppend['Title Score']
     dataframe['Body Score'] = dictWithpolarityValuestoAppend['Body Score']
     dataframe['Comments Score'] = dictWithpolarityValuestoAppend['Comments Score']
