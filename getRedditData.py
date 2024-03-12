@@ -18,7 +18,7 @@ USERNAME = "unixparadox"
 PASSWORD = "numbers4799"
 
 
-TOP_LIMIT = 5
+TOP_LIMIT = 2
 COMMENTS_LIMIT = 2
 
 

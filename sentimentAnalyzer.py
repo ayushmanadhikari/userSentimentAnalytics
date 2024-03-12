@@ -4,11 +4,18 @@
 import pandas as pd
 from vaderSentiment.vaderSentiment import SentimentIntensityAnalyzer
 import nltk
+import csv
+import ast
 
 
 
 #defined constants
 CSVFILENAME = "data/cryptodataTest.csv"
+
+#cryptocurrencies with their symbols lsit
+cryptocurrencies = ["BTC", "Bitcoin", "ETH", "Ethereum", "USDT", "Tether", "BNB", "Binance Coin", "SOL", "Solana", "XRP", "Ripple", "USDC", "USD Coin",
+"ADA", "Cardano", "AVAX", "Avalanche", "DOGE", "Dogecoin", "LINK", "Chainlink", "TRX", "TRON", "DOT", "Polkadot", "MATIC", "Polygon", "TON", "TON Crystal",
+"ICP", "Internet Computer", "SHIB", "Shiba Inu", "DAI", "Dai", "LTC", "Litecoin", "BCH", "Bitcoin Cash", "UNI", "Uniswap", "LEO", "UNUS SED LEO", "ATOM", "Cosmos"]
 
 
 
@@ -45,33 +52,45 @@ def sentimentKeywordOutput(outputDict):
 
 
 
-
-def namedEntityRecognizer(sentence):
+#analyzes a sentence to get which crypto it has mentioned
+#input is sentence... output is list containing crypto name/s
+def cryptoRecognizer(sentence):
     tokens = nltk.word_tokenize(sentence)
-    taggedTokens = nltk.pos_tag(tokens)
-    entities = nltk.ne_chunk(taggedTokens)
-    pass
+    # Identify tokens that are in the list of cryptocurrencies
+    mentioned_cryptos = []
+    for coin in cryptocurrencies:
+        for token in tokens:
+            if token.lower() == coin.lower():
+                mentioned_cryptos.append(token.lower())
+
+    return mentioned_cryptos
+    
 
 
 
 #recieves the dataframe containing title, body, comments and returns the polarity score for each (dataframe)
-def getPolarityScores(dataframe):
+def getPolarityScoresnCrypto(dataframe):
 
-    dictWithpolarityValuestoAppend = {'Title Score':[], 'Body Score': [], 'Comments Score': []}
+    dictWithpolarityValuesnCrypto = {'Title Score':[], 'Body Score': [], 'Comments Score': [],
+                                      'Title Crypto': [], 'Body Crypto': [], 'Comments Crypto': []}
 
     #get scores for title
     print("extracting scores for title....")
     for sentence in dataframe['Title']:
         sentimentScoreDict = sentimentAnalyzer(sentence)
-        dictWithpolarityValuestoAppend['Title Score'].append(sentimentScoreDict['compound'])
+        cryptosMentioned = cryptoRecognizer(str(sentence))
+        dictWithpolarityValuesnCrypto['Title Score'].append(sentimentScoreDict['compound'])
+        dictWithpolarityValuesnCrypto['Title Crypto'].append(cryptosMentioned)
         #print(sentimentScoreDict['compound'])
+
 
     #get scores for body
     print("extracting scores for body....")
     for sentence in dataframe['Body']:
-
         sentimentScoreDict = sentimentAnalyzer(str(sentence))
-        dictWithpolarityValuestoAppend['Body Score'].append(sentimentScoreDict['compound'])
+        cryptosMentioned = cryptoRecognizer(str(sentence))
+        dictWithpolarityValuesnCrypto['Body Score'].append(sentimentScoreDict['compound'])
+        dictWithpolarityValuesnCrypto['Body Crypto'].append(cryptosMentioned)
         #print(sentimentScoreDict['compound'])
 
     
@@ -82,34 +101,69 @@ def getPolarityScores(dataframe):
         totalCommentScore = 0
         avgCommentScore = 0
         count = 0
+        #print("comment list:  ",commentsList)
+        #print("type of  list:  ",type(commentsList))
+        cryptosMentionedTotal = []
+        commentsList = ast.literal_eval(commentsList)
         for sentence in commentsList:
             score = sentimentAnalyzer(sentence)
+            cryptosMentioned = cryptoRecognizer(str(sentence))
+            print(f"cryptosmentioned:  ",cryptosMentioned)
             totalCommentScore = totalCommentScore + score['compound']
             if score['compound'] != 0:
-                count = count + 1           
+                count = count + 1  
+            if cryptosMentioned != [] and cryptosMentioned not in cryptosMentionedTotal:
+                cryptosMentionedTotal.append(cryptosMentioned)    
+        print(f"crypstosmentionedTotal:  ", cryptosMentionedTotal) 
         avgCommentScore = totalCommentScore/count
         #postCount = postCount + 1   
         #print(postCount)
-        print(avgCommentScore)
-        dictWithpolarityValuestoAppend['Comments Score'].append(avgCommentScore)
+        #print(avgCommentScore)
+        dictWithpolarityValuesnCrypto['Comments Score'].append(avgCommentScore)
+        dictWithpolarityValuesnCrypto['Comments Crypto'].append(cryptosMentionedTotal)
 
 
 
-    dataframe['Title Score'] = dictWithpolarityValuestoAppend['Title Score']
-    dataframe['Body Score'] = dictWithpolarityValuestoAppend['Body Score']
-    dataframe['Comments Score'] = dictWithpolarityValuestoAppend['Comments Score']
-
+    dataframe['Title Score'] = dictWithpolarityValuesnCrypto['Title Score']
+    dataframe['Body Score'] = dictWithpolarityValuesnCrypto['Body Score']
+    dataframe['Comments Score'] = dictWithpolarityValuesnCrypto['Comments Score']
+    dataframe['Title Crypto'] = dictWithpolarityValuesnCrypto['Title Crypto']
+    dataframe['Body Crypto'] = dictWithpolarityValuesnCrypto['Body Crypto']
+    dataframe['Comments Crypto'] = dictWithpolarityValuesnCrypto['Comments Crypto']
+    
 
     return dataframe
 
 
+def getMentionedCryptos(dataframe):
+    dictWithCryptosMentioned = {'Title Crypto': [], 'Body Crypto': [], 'Comments Crypto': []}
+
+    for sentence in dataframe['Title']:
+        cryptosMentioned = cryptoRecognizer(sentence)
+        dictWithCryptosMentioned['Title Crypto'].append(cryptosMentioned)
+    
+    
+def save2scv(dataframe):
+    dataframe.to_csv('data/analyzed.csv')
+    print("\n File successfully saved!")
+
+
+  
 
 #main function
 if __name__=="__main__": 
     redditDF = getRedditData()
-    dfWithPolarityScores = getPolarityScores(redditDF)
-    print(dfWithPolarityScores.columns)
-    print(dfWithPolarityScores[['Title Score', 'Body Score', 'Comments Score']].head())
+    dfWithPolarityScoresnCrypto = getPolarityScoresnCrypto(redditDF)
+    save2scv(dfWithPolarityScoresnCrypto)
+
+    #print(dfWithPolarityScores.columns)
+    #print(dfWithPolarityScores[['Title Score', 'Body Score', 'Comments Score']].head())
+
+    # sentence = "i love dailogue solitude in bitcoinish sol"
+    # cryptos = cryptoRecognizer(sentence)
+    # print(cryptos)
+
+
 
 
     #totalList = []
