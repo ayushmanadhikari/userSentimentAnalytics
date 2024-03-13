@@ -12,7 +12,7 @@ import ast
 #defined constants
 CSVFILENAME = "data/cryptodata.csv"
 
-#cryptocurrencies with their symbols lsit
+#cryptocurrencies with their symbols list
 cryptocurrencies = ["BTC", "Bitcoin", "ETH", "Ethereum", "USDT", "Tether", "BNB", "Binance Coin", "SOL", "Solana", "XRP", "Ripple", "USDC", "USD Coin",
 "ADA", "Cardano", "AVAX", "Avalanche", "DOGE", "Dogecoin", "LINK", "Chainlink", "TRX", "TRON", "DOT", "Polkadot", "MATIC", "Polygon", "TON", "TON Crystal",
 "ICP", "Internet Computer", "SHIB", "Shiba Inu", "DAI", "Dai", "LTC", "Litecoin", "BCH", "Bitcoin Cash", "UNI", "Uniswap", "LEO", "UNUS SED LEO", "ATOM", "Cosmos"]
@@ -204,9 +204,3 @@ if __name__=="__main__":
 
 
 
-#fields we are gonna add to the original data to perform further analysis
-# title polarity score
-# body polarity score
-# comments polairty score
-# polarity keyword
-# named entity 
