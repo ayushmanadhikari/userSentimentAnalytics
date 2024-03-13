@@ -1,4 +1,4 @@
-###Project to do usersentiment analysis on different subreddits for crypto market. 
+### Project to do usersentiment analysis on different subreddits for crypto market. 
 
 What this project does is gets Users' posts from various subreddits and performs analysis on that data to get result like polarity score and the particular crypto it is talking about in those posts' title, body and comment section. On the basis of that score it predicts if the cryptos price will go up or down. 
 
