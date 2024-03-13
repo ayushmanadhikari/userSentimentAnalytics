@@ -10,7 +10,7 @@ import ast
 
 
 #defined constants
-CSVFILENAME = "data/cryptodataTest.csv"
+CSVFILENAME = "data/cryptodata.csv"
 
 #cryptocurrencies with their symbols lsit
 cryptocurrencies = ["BTC", "Bitcoin", "ETH", "Ethereum", "USDT", "Tether", "BNB", "Binance Coin", "SOL", "Solana", "XRP", "Ripple", "USDC", "USD Coin",
@@ -101,26 +101,25 @@ def getPolarityScoresnCrypto(dataframe):
         totalCommentScore = 0
         avgCommentScore = 0
         count = 0
-        #print("comment list:  ",commentsList)
-        #print("type of  list:  ",type(commentsList))
         cryptosMentionedTotal = []
         commentsList = ast.literal_eval(commentsList)
         for sentence in commentsList:
             score = sentimentAnalyzer(sentence)
             cryptosMentioned = cryptoRecognizer(str(sentence))
+            cryptosMentioned = listToString(list(set(cryptosMentioned)))
             print(f"cryptosmentioned:  ",cryptosMentioned)
             totalCommentScore = totalCommentScore + score['compound']
             if score['compound'] != 0:
                 count = count + 1  
-            if cryptosMentioned != [] and cryptosMentioned not in cryptosMentionedTotal:
-                cryptosMentionedTotal.append(cryptosMentioned)    
-        print(f"crypstosmentionedTotal:  ", cryptosMentionedTotal) 
+            #cryptosMentioned = listToString(cryptosMentioned)
+            cryptosMentionedTotal.append(cryptosMentioned)    
         avgCommentScore = totalCommentScore/count
-        #postCount = postCount + 1   
-        #print(postCount)
-        #print(avgCommentScore)
+        #splits list into sublist and again to list
+        cryptosMentionedTotal = [word for item in cryptosMentionedTotal if item for word in item.split()]
+        cryptosMentionedTotal = list(set(cryptosMentionedTotal))
+        print(f"crypstosmentionedTotal:  ", cryptosMentionedTotal) 
         dictWithpolarityValuesnCrypto['Comments Score'].append(avgCommentScore)
-        dictWithpolarityValuesnCrypto['Comments Crypto'].append(cryptosMentionedTotal)
+        dictWithpolarityValuesnCrypto['Comments Crypto'].append((cryptosMentionedTotal))
 
 
 
@@ -133,6 +132,18 @@ def getPolarityScoresnCrypto(dataframe):
     
 
     return dataframe
+
+
+
+def listToString(someList):
+    mystring = ""
+    for item in someList:
+        if mystring != "":
+            mystring = mystring+" "+item
+        else: 
+            mystring = mystring + item
+    return mystring
+
 
 
 def getMentionedCryptos(dataframe):
