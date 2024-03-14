@@ -192,10 +192,6 @@ if __name__=="__main__":
     
     # print(scoreDict)
 
-    # redditDF['Title Compound Score'] = scoreDict['Title Compound Score']
-    # #redditDF['Title Compound Keyword'] = scoreDict['Title Compound Keyword']
-    # print(redditDF.head(5))
-
 
     
 
