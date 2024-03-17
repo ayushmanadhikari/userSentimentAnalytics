@@ -42,10 +42,13 @@ def getTopSubredditsList():
         username = USERNAME, ratelimit_seconds=300, limit_type='backoff'
     )
 
-    subredditslist = subs.subreddits.search(query="cryptocurrency", limit=100)
-
+    subredditslist = subs.subreddits.search(query="cryptocurrency", limit=2)
+    subsList = []
     for subreddit in subredditslist:
         print(subreddit.display_name)
+        subsList.append(str(subreddit.display_name))
+    
+    return subsList
 
 
 
@@ -77,10 +80,10 @@ def save2csv(data_list):
 
 
 #takes reddit object as param and returns list containing all the extracted data
-def getData(reddit):
+def getData(reddit, subsList):
     totalDataList = []
     #iterates through the list of subreddits to extract the data
-    for sub in SubReddits:
+    for sub in subsList:
         print("Requested Subreddit   ---->   "+sub)
         subRedditObj = reddit.subreddit(sub)
         topSubredditObj = subRedditObj.top(limit=TOP_LIMIT)
@@ -133,9 +136,9 @@ def getDataDict(submissionObj, comments_placeholder):
 
 if __name__ == "__main__":
     dataList = []
-    #getTopSubredditsList()
+    subsList = getTopSubredditsList()
     reddit = initializeReddit()
-    dataList = getData(reddit)
+    dataList = getData(reddit, subsList)
     save2csv(dataList)
 
 
