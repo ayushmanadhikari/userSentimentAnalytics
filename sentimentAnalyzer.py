@@ -4,7 +4,6 @@
 import pandas as pd
 from vaderSentiment.vaderSentiment import SentimentIntensityAnalyzer
 import nltk
-import csv
 import ast
 
 
@@ -182,16 +181,7 @@ if __name__=="__main__":
 
     # dfPolarityScores = getPolarityScores(redditDF)
 
-    # #pass every 'title' row(sentence) to sentimentAnalyzer to get polarity compound score
-    # for sentence in redditDF['Title']:
-    #     sentimentScoreDict = sentimentAnalyzer(sentence)
-    #     sentimentKeyword = sentimentKeywordOutput(sentimentScoreDict)
-    #     scoreDict['Title Compound Score'].append(sentimentScoreDict['compound'])
-    #     #scoreDict['Title Compound Keyword'].append(sentimentKeyword)
-
-    
-    # print(scoreDict)
-
+   
 
     
 

@@ -21,6 +21,7 @@ services:
       - 9092:9092  
       - 29092:29092
     environment:
+      KAFKA_MESSAGE_MAX_BYTES: 19000000
       KAFKA_BROKER_ID: 1
       KAFKA_ZOOKEEPER_CONNECT: zk0:2181
       KAFKA_LISTENERS: PLAINTEXT://0.0.0.0:9092,PLAINTEXT_HOST://0.0.0.0:29092
@@ -45,4 +46,28 @@ services:
       KAFKA_CLUSTERS_0_JMXPORT: 9997
 
   
+
+#$ docker run -d --name elasticsearch --net somenetwork -p 9200:9200 -p 9300:9300 -e "discovery.type=single-node" elasticsearch:tag
+
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.8.0
+    ports:
+      - 9200:9200
+      - 9300:9300
+    environment:
+      discovery.type: single-node
+      xpack.security.enabled: false
   
+
+  schema-registry:
+    image: confluentinc/cp-schema-registry
+    container_name: schema1
+    platform: linux/arm64/v8
+    environment:
+      SCHEMA_REGISTRY_KAFKASTORE_BOOTSTRAP_SERVERS: kafka1:9092
+      SCHEMA_REGISTRY_HOST_NAME: schema-registry
+      SCHEMA_REGISTRY_LISTENERS: http://0.0.0.0:8081
+    ports:
+      - 8081:8081
+
+

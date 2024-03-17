@@ -1,13 +1,11 @@
 #getRedditData.py moduling
 
-from inspect import getcomments
+
 import praw
-from regex import R
 import requests
 import time
 import csv
-
-from websockets import Data
+from datetime import datetime
 
 
 #creds constant
@@ -108,6 +106,8 @@ def getComments(submissionObj):
         comments_placeholder.append(comment.body)
 
     return comments_placeholder
+
+
 
 
 

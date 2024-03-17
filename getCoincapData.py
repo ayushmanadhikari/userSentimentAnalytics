@@ -12,6 +12,12 @@ import json
 CONS_KAFKA_SERVER = "localhost:29092"
 CONS_KAFKA_TOPIC = "coincapData"
 
+# Define the base URL for the CoinCap API
+base_url = "https://api.coincap.io/v2/assets/"
+
+# List of top 20 cryptocurrencies by market cap (example)
+top_cryptos = ['bitcoin', 'ethereum', 'binancecoin', 'cardano', 'polkadot', 'chainlink', 'uniswap', 'solana', 'avalanche-2', 'ripple', 
+               'dogecoin', 'litecoin', 'polygon', 'stellar', 'vechain', 'tezos', 'cosmos', 'algorand', 'ftx-token', 'elrond', 'aave']
 
 
 def getDataCoinCap():
@@ -24,10 +30,10 @@ def getDataCoinCap():
     return response
 
 
-def sendToKafka(response):
+def sendToKafka(alldata):
     #kafka producer for pushing coincap response into kafka topic
-    producer = KafkaProducer(bootstrap_servers=CONS_KAFKA_SERVER)
-    message = json.dumps(response.text)
+    producer = KafkaProducer(bootstrap_servers=CONS_KAFKA_SERVER, max_request_size=18485760)
+    message = json.dumps(str(alldata))
     producerResponse = producer.send(CONS_KAFKA_TOPIC, message.encode('ascii'))
 
     #synchronous send code block
@@ -37,17 +43,31 @@ def sendToKafka(response):
         log.exception(KafkaError)
         pass
     
-    print("Topic: "+record_metadata.topic)
-    print("Partition: "+record_metadata.partition)
+    print("Topic: ",record_metadata.topic)
+    print("Partition: ",record_metadata.partition)
 
+
+
+
+
+def fetchHistoricalData(crypto, interval='d1'):
+    url = f"{base_url}{crypto}/history?interval={interval}"
+    response = requests.get(url)
+    data = response.json()
+    return data
 
 
 
 if __name__ == "__main__":
-    returnedResponse = getDataCoinCap()
+    #returnedResponse = fetchHistoricalData()
     print("Data extracted successfully!!!!")
     print("Posting to kafka.....")
-    sendToKafka(returnedResponse)
+    all_data = {}
+    for crypto in top_cryptos:
+        all_data[crypto] = fetchHistoricalData(crypto, interval='d1') # Assuming 'h1' for hourly data
+
+
+    sendToKafka(all_data)
 
     
 

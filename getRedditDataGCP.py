@@ -1,13 +1,11 @@
 #getRedditData.py moduling
 
-from inspect import getcomments
+
 import praw
-from regex import R
 import requests
 import time
 import csv
 
-from websockets import Data
 
 
 #creds constant
