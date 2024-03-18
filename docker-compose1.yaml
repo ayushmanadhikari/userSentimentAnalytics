@@ -48,17 +48,17 @@ services:
 
   
 
-#$ docker run -d --name elasticsearch --net somenetwork -p 9200:9200 -p 9300:9300 -e "discovery.type=single-node" elasticsearch:tag
-
   elasticsearch:
-    image: docker.elastic.co/elasticsearch/elasticsearch:8.8.0
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.17.0-arm64
     container_name: elasticsearch
+    platform: linux/arm64
     ports:
       - 9200:9200
       - 9300:9300
     environment:
       discovery.type: single-node
       xpack.security.enabled: false
+      xpack.ml.enabled: false
   
 
   # schema-registry:
@@ -94,6 +94,8 @@ services:
       CONNECT_CONFIG_STORAGE_REPLICATION_FACTOR: "1"
       CONNECT_OFFSET_STORAGE_REPLICATION_FACTOR: "1"
       CONNECT_STATUS_STORAGE_REPLICATION_FACTOR: "1"
+      CONNECT_PLUGIN_PATH: /connect-plugins
+
       
 
 
