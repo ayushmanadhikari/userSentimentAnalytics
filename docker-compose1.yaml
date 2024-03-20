@@ -80,6 +80,8 @@ services:
     platform: linux/arm64
     ports: 
       - 8083:8083
+    volumes:
+      - ./connectPlugins:/usr/share/local-connectors
     environment:
       CONNECT_GROUP_ID: 1
       CONNECT_CONFIG_STORAGE_TOPIC: connect_config_storage
@@ -94,7 +96,8 @@ services:
       CONNECT_CONFIG_STORAGE_REPLICATION_FACTOR: "1"
       CONNECT_OFFSET_STORAGE_REPLICATION_FACTOR: "1"
       CONNECT_STATUS_STORAGE_REPLICATION_FACTOR: "1"
-      CONNECT_PLUGIN_PATH: /connect-plugins
+      CONNECT_PLUGIN_PATH: "/usr/share/java,/usr/share/confluent-hub-components,/usr/share/local-connectors" 
+
 
       
 
