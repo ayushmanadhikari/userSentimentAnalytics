@@ -52,7 +52,7 @@ services:
     image: docker.elastic.co/elasticsearch/elasticsearch:7.17.0-arm64
     container_name: elasticsearch
     platform: linux/arm64
-    mem_limit: 5g
+    mem_limit: 6g
     ports:
       - 9200:9200
       - 9300:9300
