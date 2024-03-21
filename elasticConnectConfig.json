@@ -7,7 +7,10 @@
     "key.ignore": "true",
     "connection.url": "http://localhost:9200",
     "type.name": "kafka-connect",
-    "name": "elasticsearch-sink"
+    "name": "elasticsearch-sink",
+    "key.converter.schemas.enable": "false",
+    "network.host": "_global_"
+
   }
 }
 
