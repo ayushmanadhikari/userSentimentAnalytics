@@ -49,7 +49,7 @@ services:
   
 
   elasticsearch:
-    image: docker.elastic.co/elasticsearch/elasticsearch:7.17.0-arm64
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.0.0-arm64
     container_name: elasticsearch
     platform: linux/arm64
     mem_limit: 6g
@@ -60,7 +60,8 @@ services:
       discovery.type: single-node
       xpack.security.enabled: false
       xpack.ml.enabled: false
-      ES_JAVA_OPTS: -Xms2g -Xmx2g
+      xpack.security.enrollment.enabled: true
+      ES_JAVA_OPTS: -Xms128m -Xmx512m
     
   
 
