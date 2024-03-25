@@ -46,37 +46,7 @@ services:
       KAFKA_CLUSTERS_0_ZOOKEEPER: zk0:2181
       KAFKA_CLUSTERS_0_JMXPORT: 9997
 
-  
-
-  elasticsearch:
-    image: docker.elastic.co/elasticsearch/elasticsearch:8.0.0-arm64
-    container_name: elasticsearch
-    platform: linux/arm64
-    mem_limit: 6g
-    ports:
-      - 9200:9200
-      - 9300:9300
-    environment:
-      discovery.type: single-node
-      xpack.security.enabled: false
-      xpack.ml.enabled: false
-      xpack.security.enrollment.enabled: true
-      ES_JAVA_OPTS: -Xms128m -Xmx512m
-    
-  
-
-  # schema-registry:
-  #   image: confluentinc/cp-schema-registry
-  #   container_name: schema1
-  #   platform: linux/arm64/v8
-  #   environment:
-  #     SCHEMA_REGISTRY_KAFKASTORE_BOOTSTRAP_SERVERS: kafka1:9092
-  #     SCHEMA_REGISTRY_HOST_NAME: schema-registry
-  #     SCHEMA_REGISTRY_LISTENERS: http://0.0.0.0:8081
-  #   ports:
-  #     - 8081:8081
-  
-
+ 
 
   kafka-connect:
     image: confluentinc/cp-kafka-connect-base:7.6.0-1-ubi8.arm64
@@ -103,13 +73,30 @@ services:
       CONNECT_PLUGIN_PATH: "/usr/share/java,/usr/share/confluent-hub-components,/usr/share/local-connectors" 
 
 
-      
-  kibana:
-    image: docker.elastic.co/kibana/kibana:8.12.2-arm64
+  elastic:
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.0.0-arm64
+    container_name: elastic
+    environment:
+      - node.name=es01
+      - cluster.name=es-docker-cluster
+      - discovery.type=single-node
+      - bootstrap.memory_lock=true
+      - "ES_JAVA_OPTS=-Xms128m -Xmx512m"
+      - xpack.security.enabled=false
+      - xpack.security.enrollment.enabled=false
+      - cluster.routing.allocation.disk.threshold_enabled=false
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    ports:
+      - 9200:9200
+
+
+  kib01:
+    image: docker.elastic.co/kibana/kibana:8.0.0-arm64
     container_name: kibana
-    platform: linux/arm64
     ports:
       - 5601:5601
     environment:
-      ELASTICSEARCH_HOSTS: http://localhost:9200
-    
+      - ELASTICSEARCH_URL=http://elastic:9200
