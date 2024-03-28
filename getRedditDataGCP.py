@@ -16,9 +16,10 @@ USERNAME = "unixparadox"
 PASSWORD = "numbers4799"
 
 
-TOP_LIMIT = 2
-COMMENTS_LIMIT = 2
-
+#limit constants
+TOP_LIMIT = 50
+COMMENTS_LIMIT = 100
+SUB_LIMIT = 100
 
 
 session = requests.Session()
@@ -40,7 +41,7 @@ def getTopSubredditsList():
         username = USERNAME, ratelimit_seconds=300, limit_type='backoff'
     )
 
-    subredditslist = subs.subreddits.search(query="cryptocurrency", limit=2)
+    subredditslist = subs.subreddits.search(query="cryptocurrency", limit=SUB_LIMIT)
     subsList = []
     for subreddit in subredditslist:
         print(subreddit.display_name)
